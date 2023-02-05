@@ -1,6 +1,7 @@
 import csv
 import os
 import time
+import urllib
 
 import requests
 from bs4 import BeautifulSoup
@@ -25,12 +26,12 @@ def scrap_page(url):
 
 
 def write_img_to_csv_file(value_by_country, file_name):
-    with open(f'../{file_name}', 'w', newline='') as file:
+    with open(f'../{file_name}', 'w', newline='', encoding='utf-8') as file:
         writer = csv.writer(file)
 
         for key, value in value_by_country.items():
             file_name = get_file_name_from_url(value)
-            writer.writerow([key, f'<img src=\'{file_name}\'>'])
+            writer.writerow([f'<img src=\'{file_name}\'>', key])
 
 
 def download_images(value_by_country, directory_name):
@@ -57,7 +58,7 @@ def write_response_to_file(directory_name, response, url):
 
 
 def get_file_name_from_url(url):
-    return url.split("/")[-1]
+    return urllib.parse.unquote(url.split("/")[-1])
 
 
 if __name__ == '__main__':
